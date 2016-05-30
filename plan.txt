@@ -5,9 +5,9 @@ Plan
 Register an account
 	- app.get Register an account -- form to create a new user
 	- app.post ^^ create the new user
-Login (/login)
+XXXX Login (/login)
 	- app.post 
-Logout (/logout)
+XXXX Logout (/logout)
 	- app.get -- 
 Create a post
 	- app.post (form) -- into table called posts
