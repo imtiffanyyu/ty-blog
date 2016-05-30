@@ -5,6 +5,21 @@ html
 		h2= user.name
 		h3= user.email
 
+		h3 Create Post:
+		form(action='/blog' method='post')
+			label title:
+			input(name='title')
+			br
+			label body:
+			input(name='body')
+			br
+			input(type='submit' value='create post')
+
 		a(href='/') home
 		br
 		a(href='/logout') log out
+
+		//- each post in blog
+		//- 	h4= post.title 
+		//- 	ul
+		//- 		li= post.body

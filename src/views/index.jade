@@ -13,6 +13,7 @@ html
 			});
 	body
 		if user
+			h2= 'Logged in as '+ user.name
 			a(href='/profile') view profile
 			br
 			a(href='/logout') log out
@@ -20,8 +21,10 @@ html
 			form(action='/login' method='post')
 				label email
 				input#email(name='email' required)
+				br
 				label password
 				input#password(name='password' required)
+				br
 				input(type='submit' value='login' id='submit')
-
+			a(href='/new') create new user
 		h2#error-message= message

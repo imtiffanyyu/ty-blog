@@ -1,0 +1,16 @@
+doctype html
+html
+	head
+	body
+		a(href='/') home
+		form(action='/users' method='post')
+			label name
+			input(name='name')
+			br
+			label email
+			input(name='email')
+			br
+			label password
+			input(name='password')
+			br
+			input(type='submit' value='create user')

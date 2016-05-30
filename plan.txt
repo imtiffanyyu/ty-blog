@@ -3,14 +3,14 @@ Plan
 2. posts: title, body, (assigned to user)
 3. comments: comment (assigned to posts and user?)
 Register an account
-	- app.get Register an account -- form to create a new user
-	- app.post ^^ create the new user
-XXXX Login (/login)
-	- app.post 
-XXXX Logout (/logout)
-	- app.get -- 
+	XXXX - app.get Register an account -- form to create a new user
+	XXXX - app.post ^^ create the new user
+Login (/login)
+	XXXX - app.post 
+Logout (/logout)
+	XXXX - app.get -- 
 Create a post
-	- app.post (form) -- into table called posts
+	XXXX - app.post (form) -- into table called posts
 View a list of posts
 	- profile.jade view profile 
 	- PG select * from posts where user id is #
