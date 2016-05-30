@@ -1,0 +1,25 @@
+{
+  "name": "ty-blog",
+  "version": "1.0.0",
+  "description": "Homework: blog application (May 30, 2016)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nycda-geeks/ty-blog.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nycda-geeks/ty-blog/issues"
+  },
+  "homepage": "https://github.com/nycda-geeks/ty-blog#readme",
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "sequelize": "^3.23.3"
+  }
+}

@@ -1,0 +1,53 @@
+Plan
+1. user: username, password
+2. posts: title, body, (assigned to user)
+3. comments: comment (assigned to posts and user?)
+Register an account
+	- app.get Register an account -- form to create a new user
+	- app.post ^^ create the new user
+Login (/login)
+	- app.post 
+Logout (/logout)
+	- app.get -- 
+Create a post
+	- app.post (form) -- into table called posts
+View a list of posts
+	- profile.jade view profile 
+	- PG select * from posts where user id is #
+View a list of everyone's posts
+	- PG select * from posts order by id
+View post and comments
+	- select * from comments where post id is #
+Create a comment
+	- app.post (form) -- into a table called comments
+
+
+Put to update and delete to delete	
+
+
+Summary
+
+Project Specification
+Create a blogging application that allows users to do the following:
+XX - register an account
+XX - login
+XX - logout
+
+Once logged in, a user should be able to:
+XX - create a post
+XX - view a list of their own posts
+XX - view a list of everyone's posts
+- view a specific post, including the comments people have made about it
+- leave a comment on a post
+
+Prior to coding, determine the following:
+- your tables: what columns will they have? How will they connect to one another?
+- make a diagram showing the relationships between tables.
+- your routes: what routes should you have? What should each route do?
+Once you are done designing your application, then proceed with coding.
+Submit this document in a text file as part of your application.
+
+Other requirements:
+Your routes must be "RESTful". See slide 4 of the http requests lecture: Link. Also look at the RESTful routing example in the node sample apps: Link (Links to an external site.)
+You must use Sequelize for this assignment. Your connection string must once again be read from the environment variables you set up for the Bulletin Board assignment.
+Commit well - each commit should ideally be a new piece of functionality.
