@@ -13,10 +13,10 @@ html
 			});
 	body
 		if user
-			h2= 'Logged in as '+ user.name
 			a(href='/profile') view profile
 			br
 			a(href='/logout') log out
+			h2= 'Logged in as '+ user.name
 		else
 			form(action='/login' method='post')
 				label email

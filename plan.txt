@@ -12,8 +12,8 @@ Logout (/logout)
 Create a post
 	XXXX - app.post (form) -- into table called posts
 View a list of posts
-	- profile.jade view profile 
-	- PG select * from posts where user id is #
+	XXXX - profile.jade view profile 
+	XXXX - PG select * from posts where user id is #
 View a list of everyone's posts
 	- PG select * from posts order by id
 View post and comments

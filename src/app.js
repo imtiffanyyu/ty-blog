@@ -70,24 +70,42 @@ app.post('/users', bodyParser.urlencoded({extended: true}), function (request, r
 
 //creates new post
 app.post('/blog', bodyParser.urlencoded({extended: true}), function (request, response) {
-	userPost.create({
-		title: request.body.title,
-		body: request.body.body,
-		userId: request.session.userId
-	}).then(function (blog) {
+	User.findOne({
+		where: {
+		id: request.session.user.id
+	}
+	}).then(function(user) {
+		user.createPost({
+			title: request.body.title,
+			body: request.body.body
+		})
+	}).then(function () {
 		response.redirect('/profile');
 	})
 });
 
 app.get('/profile', function (request, response) {
 	var user = request.session.user;
-	var blog = userPost;
 	if (user === undefined) {
 		response.redirect('/?message=' + encodeURIComponent("Please log in to access the blog.")); // makes the string URL friendly
 	} else {
-		response.render('profile', {
+
+		userPost.findAll({
+		where: {
+			userId: user.id
+		}
+		}).then(function(posts) {
+			var data = posts.map(function (post) {
+				return {
+					title: post.dataValues.title,
+					body: post.dataValues.body
+				}
+			})
+			console.log(data);
+			response.render('profile', {
 			user: user,
-			blog: blog
+			blog: data
+		});
 		});
 	}
 });

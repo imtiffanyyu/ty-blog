@@ -2,24 +2,23 @@ doctype html
 html
 	head
 	body
-		h2= user.name
-		h3= user.email
-
-		h3 Create Post:
-		form(action='/blog' method='post')
-			label title:
-			input(name='title')
-			br
-			label body:
-			input(name='body')
-			br
-			input(type='submit' value='create post')
-
 		a(href='/') home
 		br
 		a(href='/logout') log out
 
-		//- each post in blog
-		//- 	h4= post.title 
-		//- 	ul
-		//- 		li= post.body
+		h2= "Welcome " + user.name
+		h3= "Your Email: " + user.email
+
+		h4 Create Post:
+		form(action='/blog' method='post')
+			label title: 
+			input(name='title')
+			br
+			label body: 
+			input(name='body')
+			br
+			input(type='submit' value='create post')
+
+		h4 Your Posts:
+		each blogPost in blog
+			p= blogPost.title + ": " + blogPost.body
