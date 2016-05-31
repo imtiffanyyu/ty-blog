@@ -28,12 +28,21 @@ var userPost = sequelize.define('post', {
 //create table called comments
 var userComment = sequelize.define('comment', {
 	title: Sequelize.STRING,
-	body: Sequelize.TEXT
+	commentable: Sequelize.TEXT,
+	commentable_id: Sequelize.INTEGER
 });
 
 // assigns user to posts
 User.hasMany(userPost);
 userPost.belongsTo(User);
+
+// assigns user to comments
+// User.hasMany(userComment);
+// userComment.belongsTo(User);
+
+// assigns comments to posts
+userPost.hasMany(userComment);
+userComment.belongsTo(userPost);
 
 var app = express();
 
@@ -56,7 +65,7 @@ app.get('/', function (request, response) {
 			return {
 				title: post.dataValues.title,
 				body: post.dataValues.body,
-				userId: post.dataValues.user.dataValues.name
+				username: post.dataValues.user.dataValues.name
 			};
 		})
 
