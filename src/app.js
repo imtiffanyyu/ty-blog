@@ -25,6 +25,12 @@ var userPost = sequelize.define('post', {
 	body: Sequelize.TEXT
 });
 
+//create table called comments
+var userComment = sequelize.define('comment', {
+	title: Sequelize.STRING,
+	body: Sequelize.TEXT
+});
+
 // assigns user to posts
 User.hasMany(userPost);
 userPost.belongsTo(User);
@@ -42,12 +48,28 @@ app.use(session({
 app.set('views', './src/views');
 app.set('view engine', 'jade');
 
-// initial login to create a session for the user
+// initial login to create a session for the user and show blog
 app.get('/', function (request, response) {
-	response.render('index', {
+	userPost.findAll({ include: [ User ] }).then(function (posts) {
+		console.log(posts)
+		var data = posts.map(function (post) {
+			return {
+				title: post.dataValues.title,
+				body: post.dataValues.body,
+				userId: post.dataValues.user.dataValues.name
+			};
+		})
+
+		console.log("printing results:");
+		console.log(data);
+
+		response.render('index', {
 		message: request.query.message, 
-		user: request.session.user 
+		user: request.session.user,
+		blog: data.reverse()
 	});
+	});
+
 });
 
 
@@ -84,6 +106,7 @@ app.post('/blog', bodyParser.urlencoded({extended: true}), function (request, re
 	})
 });
 
+// shows profile and user posts
 app.get('/profile', function (request, response) {
 	var user = request.session.user;
 	if (user === undefined) {
@@ -91,9 +114,9 @@ app.get('/profile', function (request, response) {
 	} else {
 
 		userPost.findAll({
-		where: {
-			userId: user.id
-		}
+			where: {
+				userId: user.id
+			}
 		}).then(function(posts) {
 			var data = posts.map(function (post) {
 				return {
@@ -101,11 +124,10 @@ app.get('/profile', function (request, response) {
 					body: post.dataValues.body
 				}
 			})
-			console.log(data);
 			response.render('profile', {
-			user: user,
-			blog: data
-		});
+				user: user,
+				blog: data.reverse()
+			});
 		});
 	}
 });

@@ -17,6 +17,9 @@ html
 			br
 			a(href='/logout') log out
 			h2= 'Logged in as '+ user.name
+			h4 All Posts:
+			each blogPost in blog
+				p= blogPost.title + " (Posted by " + blogPost.userId + "): " + blogPost.body
 		else
 			form(action='/login' method='post')
 				label email
