@@ -1,11 +1,6 @@
-doctype html
-html
-	head
-	body
-		a(href='/') home
-		br
-		a(href='/logout') log out
+extends nav
 
+block content
 		h2= "Welcome " + user.name
 		h3= "Your Email: " + user.email
 

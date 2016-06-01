@@ -1,8 +1,7 @@
-doctype html
-html
-	head
-	body
-		a(href='/') home
+extends nav
+
+block content
+		h2 Create New User
 		form(action='/users' method='post')
 			label name
 			input(name='name')
