@@ -27,18 +27,12 @@ var userPost = sequelize.define('post', {
 
 //create table called comments
 var userComment = sequelize.define('comment', {
-	title: Sequelize.STRING,
-	commentable: Sequelize.TEXT,
-	commentable_id: Sequelize.INTEGER
+	commentable: Sequelize.TEXT
 });
 
 // assigns user to posts
 User.hasMany(userPost);
 userPost.belongsTo(User);
-
-// assigns user to comments
-// User.hasMany(userComment);
-// userComment.belongsTo(User);
 
 // assigns comments to posts
 userPost.hasMany(userComment);
@@ -46,7 +40,7 @@ userComment.belongsTo(userPost);
 
 var app = express();
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: true})); 
 
 app.use(session({ 
 	secret: 'oh wow very secret much security',
@@ -59,23 +53,24 @@ app.set('view engine', 'jade');
 
 // initial login to create a session for the user and show blog
 app.get('/', function (request, response) {
-	userPost.findAll({ include: [ User ] }).then(function (posts) {
-		console.log(posts)
+	userPost.findAll({ 
+		order: 'id DESC',
+		include: [ User, userComment ] 
+	}).then(function (posts) {
 		var data = posts.map(function (post) {
 			return {
-				title: post.dataValues.title,
-				body: post.dataValues.body,
-				username: post.dataValues.user.dataValues.name
+				id: post.id,
+				title: post.title,
+				body: post.body,
+				username: post.user.name,
+				commentable: post.comments
 			};
+
 		})
-
-		console.log("printing results:");
-		console.log(data);
-
 		response.render('index', {
 		message: request.query.message, 
 		user: request.session.user,
-		blog: data.reverse()
+		blog: data
 	});
 	});
 
@@ -88,7 +83,7 @@ app.get('/new', function (request, response) {
 });
 
 // create the new user
-app.post('/users', bodyParser.urlencoded({extended: true}), function (request, response) {
+app.post('/users', function (request, response) {
 	User.create({
 		name: request.body.name,
 		email: request.body.email,
@@ -100,7 +95,7 @@ app.post('/users', bodyParser.urlencoded({extended: true}), function (request, r
 
 
 //creates new post
-app.post('/blog', bodyParser.urlencoded({extended: true}), function (request, response) {
+app.post('/blog', function (request, response) {
 	User.findOne({
 		where: {
 		id: request.session.user.id
@@ -111,7 +106,23 @@ app.post('/blog', bodyParser.urlencoded({extended: true}), function (request, re
 			body: request.body.body
 		})
 	}).then(function () {
-		response.redirect('/profile');
+		response.redirect('/');
+	})
+});
+
+//creates new comment
+app.post('/comment', function (request, response) {
+	userPost.findOne({
+		where: {
+			id: request.body.theid
+		}
+	}).then(function(blog) {
+		blog.createComment({
+			commentable: request.body.commentable
+		})
+		
+	}).then(function () {
+		response.redirect('/');
 	})
 });
 
@@ -143,7 +154,7 @@ app.get('/profile', function (request, response) {
 
 
 
-app.post('/login', bodyParser.urlencoded({extended: true}), function (request, response) {
+app.post('/login', function (request, response) {
 	if(request.body.email.length === 0) {
 		response.redirect('/?message=' + encodeURIComponent("Please fill out your email address.")); 
 		return;

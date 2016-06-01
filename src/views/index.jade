@@ -1,7 +1,10 @@
 doctype html
 html
 	head
+		link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous")
+		
 		script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+		script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous")
 		script.
 			$(document).ready(function () {
 				$('#submit').click(function(event) {
@@ -11,15 +14,49 @@ html
 					}
 				});
 			});
+
 	body
 		if user
-			a(href='/profile') view profile
-			br
-			a(href='/logout') log out
+			nav(class="navbar navbar-default")
+				div(class="container-fluid")
+					div(class="navbar-header")
+						button(type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false")
+							span(class="sr-only") Toggle navigation
+							span(class="icon-bar")
+							span(class="icon-bar")
+							span(class="icon-bar")
+						a(class="navbar-brand")	Blog Application
+				div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
+					ul(class="nav navbar-nav")
+						li(class="active")
+							a(href='/profile') view profile
+								span(class="sr-only")
+						li 
+							a(href='/logout') log out
 			h2= 'Logged in as '+ user.name
-			h4 All Posts:
+			h4 Add Post:
+			form(action='/blog' method='post')
+				label title: 
+				input(name='title')
+				br
+				label body: 
+				textarea(name='body' style='height:40px')
+				br
+				input(type='submit' value='add post')
+			
+			h4 All Posts
 			each blogPost in blog
-				p= blogPost.title + " (posted by " + blogPost.username + "): " + blogPost.body
+				p= 'ID: ' + blogPost.id
+				p= 'Posted by ' + blogPost.username +' - ' + blogPost.title + ' - ' + blogPost.body
+				each comment in blogPost.commentable
+					p= comment.commentable
+				p Add Comment:
+				form(action='/comment' method='post')
+					input(value='#{blogPost.id}' name='theid' hidden)  
+					textarea(name='commentable' style='height:40px')
+					br
+					input(type='submit' value='add comment')
+
 		else
 			form(action='/login' method='post')
 				label email
