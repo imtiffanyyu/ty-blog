@@ -1,42 +1,55 @@
 extends nav
-
 block content		
 	if user
-		h2= 'Logged in as '+ user.name
-		h4 Add Post:
-		form(action='/blog' method='post')
-			label title: 
-			input(name='title')
-			br
-			label body: 
-			textarea(name='body' style='height:40px')
-			br
-			input(type='submit' value='add post')
-		
-		h4 All Posts
-		each blogPost in blog
-			p= 'ID: ' + blogPost.id
-			p= 'Posted by ' + blogPost.username +' - ' + blogPost.title + ' - ' + blogPost.body
-			each comment in blogPost.commentable
-				p= comment.commentable
-			p Add Comment:
-			form(action='/comment' method='post')
-				input(value='#{blogPost.id}' name='theid' hidden)  
-				textarea(name='commentable' style='height:40px')
+		.container
+			h1.blog-title Welcome to the Blog
+			nav
+				ul.pager
+					li
+						p='Logged in as ' + user.name 
+					li
+						a(href='/logout') Logout
+			
+			form.form-signin(action='/blog' method='post')
+				h4.form-signin-heading New Post:
+				label.sr-only title: 
+				input.form-control(name='title', placeholder='Post title')
 				br
-				input(type='submit' value='add comment')
+				label.sr-only body: 
+				textarea.form-control(name='body', style='height:100px', placeholder='Post body')
+				br
+				input.btn.btn-lg.btn-primary(type='submit' value='add post')
+			
+			h4 All Posts
+			each blogPost in blog
+				.blog-post
+					h2.blog-post-title= blogPost.title
+					p.blog-post-meta= 'Posted by ' + blogPost.username
+					p= blogPost.body
+					h4 Comments
+					each comment in blogPost.commentable
+						p= comment.commentable
+					p Add Comment:
+					form(action='/comment' method='post')
+						input(value='#{blogPost.id}' name='theid' hidden)  
+						textarea(name='commentable' style='height:40px')
+						br
+						input(type='submit' value='add comment')
+					hr
 
 	else
-		form(action='/login' method='post')
-			label email
-			input#email(name='email' required)
-			br
-			label password
-			input#password(name='password' required)
-			br
-			input(type='submit' value='login' id='submit')
-		a(href='/new') create new user
-	h2#error-message= message
+		.container
+			form.form-signin(action='/login' method='post')
+				h2.form-signin-heading Please sign in
+				label.sr-only(for='inputEmail') email
+				input#email.form-control(name='email', type='email', placeholder='Email address', required)
+				br
+				label.sr-only(for='inputPassword') password
+				input#password.form-control(name='password', type='password', placeholder='Password', required)
+				br
+				input.btn.btn-lg.btn-primary(type='submit' value='Login' id='submit')
+				a.btn.btn-lg.btn-default(href='/new') Create Account
+			h2#error-message= message
 
 script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
 	

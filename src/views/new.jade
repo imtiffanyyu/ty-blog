@@ -1,15 +1,15 @@
 extends nav
-
 block content
-		h2 Create New User
-		form(action='/users' method='post')
-			label name
-			input(name='name')
+	.container
+		h2.form-signin-heading Create Account
+		form.form-signin(action='/users' method='post')
+			label.sr-only Name
+			input.form-control(name='name', type='name', placeholder='Name')
 			br
-			label email
-			input(name='email')
+			label.sr-only(for='inputEmail') Email
+			input#inputEmail.form-control(name='email', type='email', placeholder='Email address')
 			br
-			label password
-			input(name='password')
+			label.sr-only(for='inputPassword') Password
+			input#inputPassword.form-control(name='password', type='password', placeholder='Password')
 			br
-			input(type='submit' value='create user')
+			input.btn.btn-lg.btn-primary(type='submit' value='Create Account')

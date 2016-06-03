@@ -1,9 +1,16 @@
 extends nav
-
 block content
-		h2= "Welcome " + user.name
-		h3= "Your Email: " + user.email
+	.container
+		.blog-header
+			h1.blog-title= "Welcome " + user.name
+			p.lead.blog-description= "Your Email: " + user.email
+			ul.pager
+				li
+					a(href='/logout') Logout
 
-		h4 Your Posts:
-		each blogPost in blog
-			p= blogPost.title + ": " + blogPost.body
+			hr
+			h2.blog-title Your Posts:
+			each blogPost in blog
+				.blogpost
+					h3.blog-post-title= blogPost.title
+					p= blogPost.body
