@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/nycda-geeks/ty-blog#readme",
   "dependencies": {
+    "bcrypt": "^0.8.6",
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
     "express-session": "^1.13.0",

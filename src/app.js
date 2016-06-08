@@ -3,6 +3,18 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
+// one way encryption where data is lost
+// hash is always the same
+
+// Require the bcrypt package
+var bcrypt = require('bcrypt');
+
+// Create a password salt
+var salt = bcrypt.genSaltSync(10);
+
+// Salt and hash password
+var hash = bcrypt.hashSync(passwordFromUser, salt)
+
 // connect to the database
 var sequelize = new Sequelize('blogapplication', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
 	host: 'localhost',
@@ -84,13 +96,15 @@ app.get('/new', function (request, response) {
 
 // create the new user
 app.post('/users', function (request, response) {
-	User.create({
-		name: request.body.name,
-		email: request.body.email,
-		password: request.body.password
-	}).then(function (user) {
-		response.redirect('/profile');
-	});
+	bcrypt.hash(request.body.password, 10, function (err, hash) {
+		User.create({
+			name: request.body.name,
+			email: request.body.email,
+			password: hash
+		}).then(function (user) {
+			response.redirect('/profile');
+		});
+	})
 });
 
 
@@ -165,20 +179,23 @@ app.post('/login', function (request, response) {
 		return;
 	}
 
-	User.findOne({
-		where: {
-			email: request.body.email
-		}
-	}).then(function (user) {
-		if (user !== null && request.body.password === user.password) { // from the database
-			request.session.user = user;
-			response.redirect('/profile');
-		} else {
+	var hash = user.password;
+	bcrypt.compare(request.body.password, hash, function(err, result) {
+		User.findOne({
+			where: {
+				email: request.body.email
+			}
+		}).then(function (user) {
+			if (user !== null && request.body.password === user.password) { // from the database
+				request.session.user = user;
+				response.redirect('/profile');
+			} else {
+				response.redirect('/?message=' + encodeURIComponent("Invalid email or password."));
+			}
+		}, function (error) {
 			response.redirect('/?message=' + encodeURIComponent("Invalid email or password."));
-		}
-	}, function (error) {
-		response.redirect('/?message=' + encodeURIComponent("Invalid email or password."));
-	});
+		});
+	})
 });
 
 app.get('/logout', function (request, response) {
