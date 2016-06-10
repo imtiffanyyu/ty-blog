@@ -69,6 +69,8 @@ app.get('/', function (request, response) {
 		order: 'id DESC',
 		include: [ User, userComment ] 
 	}).then(function (posts) {
+
+
 		var data = posts.map(function (post) {
 			return {
 				id: post.id,
@@ -87,6 +89,22 @@ app.get('/', function (request, response) {
 	});
 
 });
+
+app.get('/posts/:id', function (request, response) {
+	console.log(request.params.id)
+	userPost.findAll({
+		where: {id: request.params.id},
+		include: [ User, userComment ]
+	}).then(function (post) {
+		console.log(post)
+		response.render('blog', {
+			title: post[0].dataValues.title,
+			body: post[0].dataValues.body,
+			username: post[0].dataValues.user.name,
+			commentable: post[0].dataValues.comments
+		})
+	})
+})
 
 
 // display a form to create a new user
@@ -157,6 +175,7 @@ app.get('/profile', function (request, response) {
 		}).then(function(posts) {
 			var data = posts.map(function (post) {
 				return {
+					id: post.dataValues.id,
 					title: post.dataValues.title,
 					body: post.dataValues.body
 				}
@@ -217,7 +236,7 @@ app.get('/logout', function (request, response) {
 
 
 
-sequelize.sync({force:true}).then(function () {
+sequelize.sync().then(function () {
 	var server = app.listen(3000, function () {
 		console.log('Example app listening on port: ' + server.address().port);
 	});

@@ -12,5 +12,6 @@ block content
 			h2.blog-title Your Posts:
 			each blogPost in blog
 				.blogpost
-					h3.blog-post-title= blogPost.title
+					h3.blog-post-title
+						a(href='posts/#{blogPost.id}')= blogPost.title
 					p= blogPost.body
