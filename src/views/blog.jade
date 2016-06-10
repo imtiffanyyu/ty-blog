@@ -1,0 +1,11 @@
+extends nav
+block content
+	.container
+		h2.blog-post-title= title
+		p.blog-post-meta= 'Posted by ' + username
+		p= body
+		h4 Comments
+		each comment in commentable
+			p= comment.commentable
+	//- 	p Add Comment:
+	//- 
